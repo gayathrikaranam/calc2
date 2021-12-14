@@ -1,51 +1,44 @@
-"""Testing the Calculator"""
+"""Importing Calculator Class from calculator > main.py for Testing"""
 import pytest
 from calculator.main import Calculator
+from calculator.history_calculations.history_calculations import History
 
-def test_calculator_result():
-    """testing calculator result is 0"""
-    calc = Calculator()
-    assert calc.result == 0
+# pylint: disable=unused-argument,redefined-outer-name
 
-def test_calculator_add():
-    """Testing the Add function of the calculator"""
-    #Arrange by instantiating the calc class
-    calc = Calculator()
-    #Act by calling the method to be tested
-    calc.add_number(4)
-    #Assert that the results are correct
-    assert calc.result == 4
+num1, num2, add, sub, multi, div = Calculator('csv_handling/input/data.csv').get_data()
+length = len(add)
 
-def test_calculator_get_result():
-    """Testing the Get result method of the calculator"""
-    calc = Calculator()
-    assert calc.get_result() == 0
 
-def test_calculator_subtract():
-    """Testing the subtract method of the calculator"""
-    calc = Calculator()
-    calc.subtract_number(1)
-    assert calc.get_result() == -1
-def test_calculator_multiply():
-    """ tests multiplication of two numbers"""
-    calc = Calculator()
-    result  = calc.multiply_numbers(1,2)
-    assert result == 2
-def test_calculator_division():
-    """ Testing division of two numbers"""
-    # Arrange
-    value_a = 1
-    value_b = 1
-    # Act
-    result = Calculator.divide_numbers(value_a, value_b)
-    # Assert
-    assert result == 1
+# This is called a fixture and it runs each time you pass it to a test
+@pytest.fixture
+def clear_history():
+    """ Clears history """
+    History.clear_history()
 
-def test_calculator_division_exception():
-    """ Testing division exception for division by zero"""
-    # Arrange
-    value_a = 1
-    value_b = 0
-    # Act
-    with pytest.raises(ZeroDivisionError):
-        Calculator.divide_numbers(value_a, value_b)
+
+def test_calculator_add(clear_history):
+    """ To check if calculator addition result is correct """
+
+    for i in range(length):
+        assert Calculator.add_nums(num1[i], num2[i]) == add[i]
+    assert History.get_calculation_count() == 6
+    assert History.get_last_calculation_added() == add[-1]
+    assert History.get_first_calculation_history() == add[0]
+
+
+def test_calculator_subtract(clear_history):
+    """ To check if calculator subtraction result is correct """
+    for i in range(length):
+        assert Calculator.subtract_nums(num1[i], num2[i]) == sub[i]
+
+
+def test_calculator_multiply(clear_history):
+    """ To check if calculator multiplication result is correct """
+    for i in range(length):
+        assert Calculator.multiply_nums(num1[i], num2[i]) == multi[i]
+
+
+def test_calculator_divide(clear_history):
+    """ To check if calculator division result is correct """
+    for i in range(length):
+        assert Calculator.divide_nums(num1[i], num2[i]) == div[i]
