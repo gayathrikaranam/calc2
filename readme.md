@@ -1,3 +1,3 @@
-#Calculator : Flask Messages & Validation
+#Calculator : Flash Messages & Validation
 
 ![img.png](img.png)
