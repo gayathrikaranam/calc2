@@ -6,3 +6,5 @@ class seperationofconcern(ControllerBase):
     @staticmethod
     def get():
         return render_template('seperationofconcern.html')
+
+
